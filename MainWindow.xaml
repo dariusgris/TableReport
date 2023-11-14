@@ -5,8 +5,13 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TableReport"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
-    <Grid>
-
+        Title="TableRender" Height="450" Width="800">
+    <Grid x:Name="grid">
+      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20">
+        <TextBox x:Name="inputString" Width="300" Height="25" FontSize="15" Margin="0,0,10,0" />
+        <Button x:Name="submit" Width="150" Height="25" Content="Submit" Click="Button_Click" />
+      </StackPanel>
     </Grid>
+  
+  
 </Window>
