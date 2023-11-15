@@ -130,7 +130,7 @@ namespace TableReport.Controllers
                 var Tmp = new OutageTable
                 {
                     OutageStart = _outageObject.OutageStart,
-                    OutageEnd = _outageObject.OutageStart,
+                    OutageEnd = _outageObject.OutageEnd,
                     AreaName = _outageObject.AffectedAreas[i].AreaName,
                     AffectedCustomers = _outageObject.AffectedAreas[i].AffectedCustomers,
                     Reason = _outageObject.AffectedAreas[i].Reason
@@ -146,11 +146,24 @@ namespace TableReport.Controllers
             editOutage.OutageStart = outageList[0].OutageStart;
             editOutage.OutageEnd = outageList[0].OutageEnd;
 
-            for (int i = 0; i < editOutage?.AffectedAreas?.Count; i++)
+            for (int i = 0; i < outageList.Count; i++)
             {
-                editOutage.AffectedAreas[i].AreaName = outageList[i].AreaName;
-                editOutage.AffectedAreas[i].AffectedCustomers = outageList[i].AffectedCustomers;
-                editOutage.AffectedAreas[i].Reason = outageList[i].Reason;
+                if(i < editOutage?.AffectedAreas?.Count && editOutage?.AffectedAreas[i] != null) {
+                    editOutage.AffectedAreas[i].AreaName = outageList[i].AreaName;
+                    editOutage.AffectedAreas[i].AffectedCustomers = outageList[i].AffectedCustomers;
+                    editOutage.AffectedAreas[i].Reason = outageList[i].Reason;
+                }
+                else {
+                    var Tmp = new AffectedArea {
+                        AreaId = $"area{i+1}",
+                        AreaName = outageList[i].AreaName,
+                        TotalCustomers = outageList[i].AffectedCustomers,
+                        AffectedCustomers = outageList[i].AffectedCustomers,
+                        EstimatedRecoveryTime = new DateTime(),
+                        Reason = outageList[i].Reason,
+                    };
+                    editOutage?.AffectedAreas?.Add(Tmp); 
+                }
             }
             try
             {
