@@ -1,18 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+using TableReport.Models;
+using TableReport.Controllers;
 
 namespace TableReport
 {
@@ -21,46 +12,45 @@ namespace TableReport
     /// </summary>
     public partial class MainWindow : Window
     {
+        private TableReportController _controller;
+        private Outage _outageObject;
+        public static string JsonFilePath = $"{AppDomain.CurrentDomain.BaseDirectory}" 
+            + "..\\..\\..\\Assets\\data.json";
         public MainWindow()
         {
             InitializeComponent();
+
+            _controller = new TableReportController();
+            _outageObject = GetOutageObject();
+
+            LoadData(_outageObject);
         }
-        private void Button_Click(object sender, RoutedEventArgs e)
+        private Outage GetOutageObject() => _controller.GetOutageObject(JsonFilePath);
+        private void LoadData(Outage _outageObject)
         {
-            string text = inputString.Text;
-            string result = "";
-
-            int mathSymbolIndex = text.IndexOfAny(new char[]{ '*', '-', '+', '/' });
-
-            if(mathSymbolIndex == -1)
-            {
-                string allNumbers = new string(text.Where(element => char.IsDigit(element)).ToArray());
-                result = allNumbers != "" ? allNumbers : "0";
-            }
-            else
-            {
-                string firstPart = new string(text.Take(mathSymbolIndex)
-                    .Where(element => char.IsDigit(element)).ToArray());
-                string secondPart = new string(text.Skip(mathSymbolIndex)
-                    .Where(element => char.IsDigit(element)).ToArray());
-
-                int firstNumb =   string.IsNullOrEmpty(firstPart) ? 0 : int.Parse(firstPart);
-                int secondNumb = string.IsNullOrEmpty(secondPart) ? 0 : int.Parse(secondPart);
-
-                char symbol = text[mathSymbolIndex];
-
-                result = symbol switch
-                {
-                    '+' => $"{firstNumb} + {secondNumb} = {firstNumb + secondNumb}",
-                    '-' => $"{firstNumb} - {secondNumb} = {firstNumb - secondNumb}",
-                    '*' => $"{firstNumb} * {secondNumb} = {firstNumb * secondNumb}",
-                    '/' => secondNumb != 0 ? $"{firstNumb} / {secondNumb} = {Math.Round((double)firstNumb / secondNumb, 1)}"
-                    : "Can't devide by zero!",
-                    _ => "Something went wrong!",
-                };
-            }
-
+            List<OutageTable> outageObjForView = _controller.LoadDataIntoTable(_outageObject);
+            outageDataGrid.ItemsSource = outageObjForView;
+        }
+        private void Count_Numbers(object sender, RoutedEventArgs e)
+        {
+            string result = _controller.CountNumbers(inputString.Text);
+           
             MessageBox.Show(result);
+        }
+        private void Sent_Email(object sender, RoutedEventArgs e)
+        {
+            string nameSender = inputName.Text;
+            string nameReceiver = inputNameReceiver.Text;
+            string emailSender = inputEmail.Text;
+            string password = inputPassword.Text;
+            string recipientEmail = inputRecipient.Text;
+
+            _controller.SentEmail(emailSender, password, recipientEmail, nameSender, nameReceiver, _outageObject);
+        }
+        private void Save_Edit(object sender, RoutedEventArgs e)
+        {
+            DataGrid outageGrid = outageDataGrid;
+            _controller.SaveData(outageGrid, _outageObject, JsonFilePath);
         }
     }
 }
