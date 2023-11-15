@@ -5,13 +5,51 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:TableReport"
         mc:Ignorable="d"
-        Title="TableRender" Height="450" Width="800">
+        Title="TableRender" Height="600" Width="800">
     <Grid x:Name="grid">
-      <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20">
-        <TextBox x:Name="inputString" Width="300" Height="25" FontSize="15" Margin="0,0,10,0" />
-        <Button x:Name="submit" Width="150" Height="25" Content="Submit" Click="Button_Click" />
-      </StackPanel>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20">
+            <TextBox x:Name="inputString" Width="300" Height="25" FontSize="15" Margin="0,0,10,0" />
+            <Button x:Name="count" Width="150" Height="25" Content="Submit" Click="Count_Numbers" />
+        </StackPanel>
+        <StackPanel Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="20,60,0,0">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Your name:" VerticalAlignment="Center"/>
+                <TextBox x:Name="inputName" Width="150" Height="25" FontSize="15" Margin="0,0,10,0" />
+            </StackPanel>
+            
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Email:" VerticalAlignment="Center"/>
+                <TextBox x:Name="inputEmail" Width="150" Height="25" FontSize="15" Margin="0,0,10,0" />
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Password:" VerticalAlignment="Center"/>
+                <TextBox x:Name="inputPassword" Width="150" Height="25" FontSize="15" Margin="0,0,10,0" />
+            </StackPanel>
+
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Recipient email:" VerticalAlignment="Center"/>
+                <TextBox x:Name="inputRecipient" Width="150" Height="25" FontSize="15" Margin="0,0,10,0" />
+            </StackPanel>
+            
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="Receiver name:" VerticalAlignment="Center"/>
+                <TextBox x:Name="inputNameReceiver" Width="150" Height="25" FontSize="15" Margin="0,0,10,0" />
+            </StackPanel>
+            <Button x:Name="sentEmail" Width="150" Height="25" Content="Send" Click="Sent_Email" Margin="0,10,0,0" />
+        </StackPanel>
+
+        <DataGrid x:Name="outageDataGrid" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="False" Height="100" Margin="0,160,0,0"  >
+            <DataGrid.Columns>
+                <DataGridTextColumn Header="Outage Start" Binding="{Binding OutageStart}" Width="150"/>
+                <DataGridTextColumn Header="Outage End" Binding="{Binding OutageEnd}"  Width="150"/>
+                <DataGridTextColumn Header="Area Name" Binding="{Binding AreaName}"  Width="150"/>
+                <DataGridTextColumn Header="Affected Customers" Binding="{Binding AffectedCustomers}" Width="150"/>
+                <DataGridTextColumn Header="Reason" Binding="{Binding Reason}" Width="150"/>
+            </DataGrid.Columns>
+        </DataGrid>
+        <Button x:Name="saveEdit" Width="150" Height="25" Content="Save" Click="Save_Edit" Margin="0,300,0,0" />
     </Grid>
-  
-  
+
+
 </Window>
